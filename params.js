@@ -104,12 +104,12 @@ export const paneImages = [
 ];
 
 export const paneVideos = [
-  'https://bunqlabs.github.io/house-of-samuha/Videos/1.mp4',
-  'https://bunqlabs.github.io/house-of-samuha/Videos/2.mp4',
-  'https://bunqlabs.github.io/house-of-samuha/Videos/3.mp4',
-  'https://bunqlabs.github.io/house-of-samuha/Videos/4.mp4',
-  'https://bunqlabs.github.io/house-of-samuha/Videos/5.mp4',
-  'https://bunqlabs.github.io/house-of-samuha/Videos/6.mp4',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/1.mp4',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/2.mp4',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/3.mp4',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/4.mp4',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/5.mp4',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/6.mp4',
 ];
 
 export const chefImages = [
