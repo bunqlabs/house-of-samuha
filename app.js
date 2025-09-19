@@ -1,11 +1,15 @@
-import { bgVert, bgFrag, gradFrag } from '/shaders.js';
+import {
+  bgVert,
+  bgFrag,
+  gradFrag,
+} from 'https://bunqlabs.github.io/house-of-samuha/shaders.js';
 import {
   CONFIG as RAW_CONFIG,
   params,
   paneImages,
   paneVideos,
   chefImages,
-} from '/params.js';
+} from 'https://bunqlabs.github.io/house-of-samuha/params.js';
 import { createDebugPanel } from '/debug.js';
 
 // turn array → THREE.Vector3 here (keeps params.js free of THREE)
@@ -434,8 +438,10 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // Utils: Text Sprite Creation
   // -----------------------------
 
+  // Replace the createTextSprite function
   function createTextSprite(index) {
-    const src = chefImages[index % chefImages.length].chefTitle; // Access chefTitle from chefImages
+    const chefData = chefImages[index % chefImages.length];
+    const src = chefData.chefTitle; // Access chefTitle from chefImages
     const texture = getTexture(src);
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
@@ -1119,36 +1125,41 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     const rightGroup = new THREE.Group();
 
     const chefVert = `
-    varying vec2 vUv;
-    varying vec3 vWorldPos;
-    void main() {
-      vUv = uv;
-      vWorldPos = (modelMatrix * vec4(position, 1.0)).xyz;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `;
+      varying vec2 vUv;
+      varying vec3 vWorldPos;
+      void main() {
+        vUv = uv;
+        vWorldPos = (modelMatrix * vec4(position, 1.0)).xyz;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `;
 
     const chefFrag = `
-    uniform sampler2D map;
-    uniform float uExposure;
-    uniform float uOpacity;
-    uniform vec3 uCameraPos;
-    varying vec2 vUv;
-    varying vec3 vWorldPos;
-    void main() {
-      vec4 color = texture2D(map, vUv);
-      float dist = length(vWorldPos - uCameraPos);
-      float opacity = clamp((10.0 - dist) / (10.0 - 2.0), 0.0, 1.0);
-      vec3 finalColor = color.rgb * uExposure;
-      gl_FragColor = vec4(finalColor, color.a * opacity * uOpacity);
-    }
-  `;
+      uniform sampler2D map;
+      uniform float uExposure;
+      uniform float uOpacity;
+      uniform vec3 uCameraPos;
+      varying vec2 vUv;
+      varying vec3 vWorldPos;
+      void main() {
+        vec4 color = texture2D(map, vUv);
+        float dist = length(vWorldPos - uCameraPos);
+        float opacity = clamp((10.0 - dist) / (10.0 - 2.0), 0.0, 1.0);
+        vec3 finalColor = color.rgb * uExposure;
+        gl_FragColor = vec4(finalColor, color.a * opacity * uOpacity);
+      }
+    `;
 
     for (let i = 0; i < count; i++) {
       const y = startY + i * spacingY;
-      const chefDataRight = chefImages[i % chefImages.length];
-      const chefDataLeft = chefImages[(i + count) % chefImages.length];
+      // Left wall: First three chefs (indices 0, 1, 2 for Antonio, Jia, Bennett)
+      const leftChefIndex = i % 3; // Cycle through 0, 1, 2
+      const chefDataLeft = chefImages[leftChefIndex];
+      // Right wall: Last three chefs (indices 3, 4, 5 for Malik, Marco, Nikos)
+      const rightChefIndex = 3 + (i % 3); // Cycle through 3, 4, 5
+      const chefDataRight = chefImages[rightChefIndex];
 
+      // Right chef
       const rightSrc = chefDataRight.imageLink;
       const rightTex = getTexture(rightSrc);
       const rightMat = new THREE.ShaderMaterial({
@@ -1165,7 +1176,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       });
       applyCoverUV(rightTex, params.chefSizeX, params.chefSizeY);
       const rightMesh = new THREE.Mesh(chefPlaneLocal, rightMat);
-      const rightTextSprite = createTextSprite(i * 2);
+      const rightTextSprite = createTextSprite(rightChefIndex);
       const rightChefGroup = new THREE.Group();
       rightChefGroup.add(rightMesh, rightTextSprite);
       rightChefGroup.position.set(+params.wallOffsetX - params.chefLocX, y, 0);
@@ -1183,6 +1194,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
         index: i * 2,
       });
 
+      // Left chef
       const leftSrc = chefDataLeft.imageLink;
       const leftTex = getTexture(leftSrc);
       const leftMat = new THREE.ShaderMaterial({
@@ -1199,7 +1211,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       });
       applyCoverUV(leftTex, params.chefSizeX, params.chefSizeY);
       const leftMesh = new THREE.Mesh(chefPlaneLocal, leftMat);
-      const leftTextSprite = createTextSprite(i * 2 + 1);
+      const leftTextSprite = createTextSprite(leftChefIndex);
       const leftChefGroup = new THREE.Group();
       leftChefGroup.add(leftMesh, leftTextSprite);
       leftChefGroup.position.set(-params.wallOffsetX + params.chefLocX, y, 0);
