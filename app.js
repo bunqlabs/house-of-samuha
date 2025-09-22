@@ -245,91 +245,6 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   scene.add(lightHelper);
 
   // -----------------------------
-  // Footer Scene
-  // -----------------------------
-  const footerContainer = document.getElementById('footer-webgl');
-  const footerScene = new THREE.Scene();
-  const footerRenderer = new THREE.WebGLRenderer({ antialias: true });
-  footerRenderer.setPixelRatio(params.dpr);
-  footerRenderer.setSize(
-    footerContainer.clientWidth,
-    footerContainer.clientHeight
-  );
-  footerContainer.appendChild(footerRenderer.domElement);
-
-  const footerCamera = new THREE.PerspectiveCamera(
-    CONFIG.camera.fov,
-    footerContainer.clientWidth / footerContainer.clientHeight,
-    CONFIG.camera.near,
-    CONFIG.camera.far
-  );
-  footerCamera.position.set(0, 0, 5);
-  footerCamera.lookAt(0, 0, 0);
-
-  const footerBgMat = new THREE.ShaderMaterial({
-    vertexShader: bgVert,
-    fragmentShader: bgFrag,
-    uniforms: {
-      uTime: { value: 0.0 },
-      uAspect: { value: params.bgPlaneX / params.bgPlaneY },
-      uScale: { value: params.scale },
-      uSeed: { value: new THREE.Vector2(seed[0], seed[1]) },
-      uSpeed: { value: params.speed },
-      uFbmOctaves: { value: params.fbmOctaves },
-      uRidgeOctaves: { value: params.ridgeOctaves },
-      uWarp1: { value: params.warp1 },
-      uWarp2: { value: params.warp2 },
-      uDetailsAmp: { value: params.detailsAmp },
-      uVeilsAmp: { value: params.veilsAmp },
-      uCMin: { value: params.contrastMin },
-      uCMax: { value: params.contrastMax },
-      uHotspotOn: { value: params.hotspotOn ? 1 : 0 },
-      uHotspot: {
-        value: new THREE.Vector4(
-          params.hotspotX,
-          params.hotspotY,
-          params.hotspotInner * params.hotspotInner,
-          params.hotspotOuter * params.hotspotOuter
-        ),
-      },
-      uHotspotStrength: { value: params.hotspotStrength },
-      uCanvasOpacity: { value: params.canvasOpacity },
-      uBaseColor: {
-        value: new THREE.Vector3(
-          params.baseColorR,
-          params.baseColorG,
-          params.baseColorB
-        ),
-      },
-    },
-    transparent: true,
-    side: THREE.DoubleSide,
-    blending: blendModes[params.blendMode] || THREE.NormalBlending,
-  });
-
-  const footerBackground = new THREE.Mesh(
-    new THREE.PlaneGeometry(params.bgPlaneX, params.bgPlaneY),
-    footerBgMat
-  );
-  footerBackground.position.y = params.bgPlaneLocY;
-  footerBackground.rotation.x = Math.PI;
-  footerScene.add(footerBackground);
-
-  // -----------------------------
-  // Footer Visibility Observer
-  // -----------------------------
-  let footerVisible = false;
-  const footerObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        footerVisible = entry.isIntersecting;
-      });
-    },
-    { threshold: 0.1 } // Trigger when 10% of footer is visible
-  );
-  footerObserver.observe(footerContainer);
-
-  // -----------------------------
   // Utils: applyCoverUV
   // -----------------------------
   function applyCoverUV(tex, planeW, planeH) {
@@ -437,11 +352,9 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // -----------------------------
   // Utils: Text Sprite Creation
   // -----------------------------
-
-  // Replace the createTextSprite function
   function createTextSprite(index) {
     const chefData = chefImages[index % chefImages.length];
-    const src = chefData.chefTitle; // Access chefTitle from chefImages
+    const src = chefData.chefTitle;
     const texture = getTexture(src);
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
@@ -1152,14 +1065,11 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
 
     for (let i = 0; i < count; i++) {
       const y = startY + i * spacingY;
-      // Left wall: First three chefs (indices 0, 1, 2 for Antonio, Jia, Bennett)
-      const leftChefIndex = i % 3; // Cycle through 0, 1, 2
+      const leftChefIndex = i % 3;
       const chefDataLeft = chefImages[leftChefIndex];
-      // Right wall: Last three chefs (indices 3, 4, 5 for Malik, Marco, Nikos)
-      const rightChefIndex = 3 + (i % 3); // Cycle through 3, 4, 5
+      const rightChefIndex = 3 + (i % 3);
       const chefDataRight = chefImages[rightChefIndex];
 
-      // Right chef
       const rightSrc = chefDataRight.imageLink;
       const rightTex = getTexture(rightSrc);
       const rightMat = new THREE.ShaderMaterial({
@@ -1194,7 +1104,6 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
         index: i * 2,
       });
 
-      // Left chef
       const leftSrc = chefDataLeft.imageLink;
       const leftTex = getTexture(leftSrc);
       const leftMat = new THREE.ShaderMaterial({
@@ -1249,13 +1158,6 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-
-    const footerW = footerContainer.clientWidth;
-    const footerH = footerContainer.clientHeight;
-    footerRenderer.setSize(footerW, footerH);
-    footerCamera.aspect = footerW / footerH;
-    footerCamera.updateProjectionMatrix();
-    footerBgMat.uniforms.uAspect.value = params.bgPlaneX / params.bgPlaneY;
   }
   window.addEventListener('resize', onResize);
 
@@ -1276,12 +1178,10 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       if (fps < targetFPSLow && params.fbmOctaves > 4) {
         params.fbmOctaves = 4;
         bgMat.uniforms.uFbmOctaves.value = params.fbmOctaves;
-        footerBgMat.uniforms.uFbmOctaves.value = params.fbmOctaves;
         console.log('octaves :', params.fbmOctaves);
       } else if (fps > targetFPSHigh && params.fbmOctaves < 6) {
         params.fbmOctaves = 6;
         bgMat.uniforms.uFbmOctaves.value = params.fbmOctaves;
-        footerBgMat.uniforms.uFbmOctaves.value = params.fbmOctaves;
         console.log('octaves :', params.fbmOctaves);
       }
       console.log('octaves :', params.fbmOctaves);
@@ -1295,7 +1195,6 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     stats.begin();
     const currentTime = (performance.now() - t0) / 1000.0;
     bgMat.uniforms.uTime.value = currentTime;
-    footerBgMat.uniforms.uTime.value = currentTime;
     adaptPerformance();
 
     let minZ = Infinity;
@@ -1393,9 +1292,6 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     }
 
     renderer.render(scene, camera);
-    if (footerVisible) {
-      footerRenderer.render(footerScene, footerCamera);
-    }
     stats.end();
   });
 })();
