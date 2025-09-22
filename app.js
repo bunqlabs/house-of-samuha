@@ -26,6 +26,8 @@ const textureCache = new Map(); // Key: src (string), Value: THREE.Texture
 const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoElement, texture: THREE.VideoTexture }
 
 (() => {
+  const startTime = performance.now();
+  console.log('Starting scene initialization and loading process');
   // -----------------------------
   // Config / Params
   // -----------------------------
@@ -41,23 +43,44 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // Texture and video loading with caching
   function getTexture(src) {
     if (!textureCache.has(src)) {
-      const tex = texLoader.load(src, undefined, undefined, (err) => {
-        console.error(`Failed to load texture ${src}:`, err);
-      });
+      console.log(`Starting to load texture: ${src}`);
+      const tex = texLoader.load(
+        src,
+        (texture) => {
+          console.log(`Texture loaded successfully: ${src}`);
+        },
+        undefined,
+        (err) => {
+          console.error(`Failed to load texture: ${src}`, err);
+        }
+      );
       textureCache.set(src, tex);
+    } else {
+      console.log(`Using cached texture: ${src}`);
     }
     return textureCache.get(src);
   }
 
   function getVideoTexture(src) {
     if (!videoCache.has(src)) {
+      console.log(`Starting to load video: ${src}`);
       const video = document.createElement('video');
       video.src = src;
       video.muted = true;
-      video.loop = false;
+      video.loop = true; // Enable looping for videos
       video.preload = 'metadata';
       video.playsInline = true;
       video.crossOrigin = 'anonymous';
+
+      video.addEventListener('loadedmetadata', () => {
+        console.log(`Video metadata loaded: ${src}`);
+      });
+      video.addEventListener('canplay', () => {
+        console.log(`Video ready to play: ${src}`);
+      });
+      video.addEventListener('error', (e) => {
+        console.error(`Error loading video: ${src}`, e);
+      });
 
       video.addEventListener('ended', () => {
         video._ended = true;
@@ -70,6 +93,8 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       videoTex.generateMipmaps = false;
 
       videoCache.set(src, { video, texture: videoTex });
+    } else {
+      console.log(`Using cached video: ${src}`);
     }
     return videoCache.get(src);
   }
@@ -773,8 +798,13 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     roughnessMap: texLoader.load(
       'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60a68bb01b690ee98c8_roughness.jpg',
       (tex) => {
+        console.log('Roughness map texture loaded successfully');
         tex.flipY = false;
         if (tex.colorSpace !== undefined) tex.colorSpace = THREE.NoColorSpace;
+      },
+      undefined,
+      (err) => {
+        console.error('Failed to load roughness map texture', err);
       }
     ),
   });
@@ -783,9 +813,13 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // Plate model
   // -----------------------------
   function addLogoTo(plate) {
+    const logoSrc =
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60abccb39942d8c6792_logo.png';
+    console.log(`Starting to load logo texture: ${logoSrc}`);
     texLoader.load(
-      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60abccb39942d8c6792_logo.png',
+      logoSrc,
       (tex) => {
+        console.log(`Logo texture loaded successfully: ${logoSrc}`);
         const aspect = (tex.image?.width || 1) / (tex.image?.height || 1);
         const H = 0.5;
         const geom = new THREE.PlaneGeometry(H * aspect, H);
@@ -802,6 +836,10 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
 
         logo.renderOrder = 1;
         plate.add(logo);
+      },
+      undefined,
+      (err) => {
+        console.error(`Failed to load logo texture: ${logoSrc}`, err);
       }
     );
   }
@@ -811,9 +849,12 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   let plateRotY;
 
   const loader = new THREE.GLTFLoader();
+  const modelUrl = 'https://rohan-pckg.github.io/3d-stuff/models/plate.glb';
+  console.log(`Starting to load plate model: ${modelUrl}`);
   loader.load(
-    'https://rohan-pckg.github.io/3d-stuff/models/plate.glb',
+    modelUrl,
     (gltf) => {
+      console.log(`Plate model loaded successfully: ${modelUrl}`);
       plate = gltf.scene;
       plate.traverse((o) => {
         if (o.isMesh) {
@@ -890,6 +931,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // Builders
   // -----------------------------
   function buildWalls() {
+    console.log('Building walls group');
     disposeChildren(walls, {
       disposeMaterials: true,
       excludeMaterials: [wallMat, wallMatInverse],
@@ -930,9 +972,11 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
 
     walls.add(instancedMeshLeft, instancedMeshRight);
     walls.position.y = params.wallY;
+    console.log('Walls group built');
   }
 
   function buildPanes() {
+    console.log('Building panes group');
     if (paneMedia && paneMedia.length) {
       for (const m of paneMedia) {
         try {
@@ -1019,9 +1063,11 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     }
 
     panes.position.y = params.panesY;
+    console.log('Panes group built');
   }
 
   function buildChefs() {
+    console.log('Building chefs group');
     disposeChildren(chefs, { disposeMaterials: true, excludeMaterials: [] });
     chefMedia = [];
 
@@ -1143,6 +1189,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     chefs.position.y = params.wallY + params.chefLocY;
 
     console.log('chefMedia populated:', chefMedia.length, 'items');
+    console.log('Chefs group built');
   }
 
   buildWalls();
@@ -1294,4 +1341,37 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     renderer.render(scene, camera);
     stats.end();
   });
+
+  console.log(`
+
+
+
+
+
+@@@@@@@@@@  @@       @@  @@@      @@    @@@@@@@   
+@@       @@ @@       @@  @@@@     @@  @@       @@ 
+@@       @@ @@       @@  @@ @@    @@ @@         @@
+@@@@@@@@@@@ @@       @@  @@  @@   @@ @@         @@
+@@       @@ @@       @@  @@    @@ @@ @@         @@
+@@       @@ @@       @@  @@     @@@@  @@       @@ 
+@@@@@@@@@@    @@@@@@@    @@       @@    @@@@@@@@@@
+                                                  
+  @@           @@    @@@@@@@    @@@@@             
+  @@         @@@@@   @@    @@ @@@   @@@           
+  @@        @@  @@  @@     @@ @@                  
+ @@        @@   @@  @@@@@@@@  @@@@@@              
+ @@       @@@@@@@@  @@    @@       @@@            
+ @@      @@@    @@  @@    @@        @@            
+@@@@@@@@@@@     @@ @@@@@@@@  @@@@@@@@ 
+
+Website by BUNQ LABS.
+www.bunqlabs.com
+
+
+
+
+
+  `);
+  const endTime = performance.now();
+  console.log(`Completed in ${endTime - startTime} ms`);
 })();
