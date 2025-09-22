@@ -9,7 +9,7 @@ import {
   paneImages,
   paneVideos,
   chefImages,
-} from 'https://bunqlabs.github.io/house-of-samuha/params.js';
+} from '/params.js';
 import { createDebugPanel } from 'https://bunqlabs.github.io/house-of-samuha/debug.js';
 
 // turn array → THREE.Vector3 here (keeps params.js free of THREE)
@@ -67,7 +67,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       const video = document.createElement('video');
       video.src = src;
       video.muted = true;
-      video.loop = true; // Enable looping for videos
+      video.loop = true;
       video.preload = 'metadata';
       video.playsInline = true;
       video.crossOrigin = 'anonymous';
@@ -1208,6 +1208,93 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   }
   window.addEventListener('resize', onResize);
 
+  // Wait for all assets to load before logging completion
+  const assetsToLoad = [
+    // Plate model
+    new Promise((resolve, reject) => {
+      loader.load(
+        'https://rohan-pckg.github.io/3d-stuff/models/plate.glb',
+        () => resolve(),
+        undefined,
+        () => resolve() // Resolve even on error to avoid blocking
+      );
+    }),
+    // Logo texture
+    new Promise((resolve, reject) => {
+      texLoader.load(
+        'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60abccb39942d8c6792_logo.png',
+        () => resolve(),
+        undefined,
+        () => resolve()
+      );
+    }),
+    // Roughness map
+    new Promise((resolve, reject) => {
+      texLoader.load(
+        'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60a68bb01b690ee98c8_roughness.jpg',
+        () => resolve(),
+        undefined,
+        () => resolve()
+      );
+    }),
+    // Chef textures
+    ...chefImages
+      .map((chef) => [
+        new Promise((resolve, reject) => {
+          texLoader.load(
+            chef.imageLink,
+            () => resolve(),
+            undefined,
+            () => resolve()
+          );
+        }),
+        new Promise((resolve, reject) => {
+          texLoader.load(
+            chef.chefTitle,
+            () => resolve(),
+            undefined,
+            () => resolve()
+          );
+        }),
+      ])
+      .flat(),
+    // Pane videos
+    ...paneVideos.map(
+      (src) =>
+        new Promise((resolve, reject) => {
+          const video = document.createElement('video');
+          video.src = src;
+          video.addEventListener('loadedmetadata', () => resolve());
+          video.addEventListener('error', () => resolve());
+        })
+    ),
+  ];
+
+  Promise.all(assetsToLoad).then(() => {
+    console.log(`
+@@@@@@@@@@  @@       @@  @@@      @@    @@@@@@@   
+@@       @@ @@       @@  @@@@     @@  @@       @@ 
+@@       @@ @@       @@  @@ @@    @@ @@         @@
+@@@@@@@@@@@ @@       @@  @@  @@   @@ @@         @@
+@@       @@ @@       @@  @@    @@ @@ @@         @@
+@@       @@ @@       @@  @@     @@@@  @@       @@ 
+@@@@@@@@@@    @@@@@@@    @@       @@    @@@@@@@@@@
+                                                  
+  @@           @@    @@@@@@@    @@@@@             
+  @@         @@@@@   @@    @@ @@@   @@@           
+  @@        @@  @@  @@     @@ @@                  
+ @@        @@   @@  @@@@@@@@  @@@@@@              
+ @@       @@@@@@@@  @@    @@       @@@            
+ @@      @@@    @@  @@    @@        @@            
+@@@@@@@@@@@     @@ @@@@@@@@  @@@@@@@@ 
+
+Website by BUNQ LABS.
+www.bunqlabs.com
+    `);
+    const endTime = performance.now();
+    console.log(`Completed in ${endTime - startTime} ms`);
+  });
+
   // -----------------------------
   // Animate
   // -----------------------------
@@ -1341,37 +1428,4 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     renderer.render(scene, camera);
     stats.end();
   });
-
-  console.log(`
-
-
-
-
-
-@@@@@@@@@@  @@       @@  @@@      @@    @@@@@@@   
-@@       @@ @@       @@  @@@@     @@  @@       @@ 
-@@       @@ @@       @@  @@ @@    @@ @@         @@
-@@@@@@@@@@@ @@       @@  @@  @@   @@ @@         @@
-@@       @@ @@       @@  @@    @@ @@ @@         @@
-@@       @@ @@       @@  @@     @@@@  @@       @@ 
-@@@@@@@@@@    @@@@@@@    @@       @@    @@@@@@@@@@
-                                                  
-  @@           @@    @@@@@@@    @@@@@             
-  @@         @@@@@   @@    @@ @@@   @@@           
-  @@        @@  @@  @@     @@ @@                  
- @@        @@   @@  @@@@@@@@  @@@@@@              
- @@       @@@@@@@@  @@    @@       @@@            
- @@      @@@    @@  @@    @@        @@            
-@@@@@@@@@@@     @@ @@@@@@@@  @@@@@@@@ 
-
-Website by BUNQ LABS.
-www.bunqlabs.com
-
-
-
-
-
-  `);
-  const endTime = performance.now();
-  console.log(`Completed in ${endTime - startTime} ms`);
 })();

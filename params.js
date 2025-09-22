@@ -21,9 +21,9 @@ export const params = {
   chefOpacityFar: 20.0,
 
   panesY: -8,
-  paneSizeX: 0.84375,
-  paneSizeY: 1.5,
-  paneRadius: 1.5,
+  paneSizeX: 1,
+  paneSizeY: 1.77,
+  paneRadius: 1,
   paneRise: 0.7,
   paneTwistDeg: 50,
   paneFillet: 0.0,
@@ -34,7 +34,7 @@ export const params = {
   paneColorTransition: 0.5,
   paneHoverScale: 1.05,
   paneHoverDuration: 0.3,
-  fadeNear: 1,
+  fadeNear: 1.8,
   fadeFar: 5,
 
   lightIntensity: 4,
@@ -49,7 +49,7 @@ export const params = {
   animatorMinY: 0,
   animatorMaxY: -35,
   animatorScrollEase: 2,
-  animatorRotateThresholdX: -10,
+  animatorRotateThresholdX: -12,
   animatorRotateOnDeg: 90,
 
   dpr: 1,
