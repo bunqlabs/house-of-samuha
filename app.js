@@ -162,6 +162,37 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   let plateRotZ;
   let plateSpinRotZ;
 
+  let containerHidden = false;
+  let rendering = true;
+
+  function hideContainer() {
+    if (containerHidden) return;
+    containerHidden = true;
+    gsap.to(container, {
+      duration: 0.6,
+      opacity: 0,
+      onComplete: () => {
+        container.style.display = 'none';
+        if (rendering) {
+          renderer.setAnimationLoop(null); // pause GPU
+          rendering = false;
+        }
+      },
+    });
+  }
+
+  function showContainer() {
+    if (!containerHidden) return;
+    containerHidden = false;
+    container.style.display = ''; // restore layout
+    container.style.opacity = 0; // start faded
+    if (!rendering) {
+      renderer.setAnimationLoop(renderLoop); // resume GPU
+      rendering = true;
+    }
+    gsap.to(container, { duration: 0.6, opacity: 1 });
+  }
+
   // -----------------------------
   // Materials
   // -----------------------------
@@ -542,7 +573,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
         ease: 'power2.out',
         overwrite: 'auto',
       });
-      gsap.to(chef.textSprite.children[0].material, {
+      gsap.to(chef.textSpritelockquote > children[0].material, {
         opacity: 0,
         duration: params.chefHoverDuration,
         ease: 'power2.out',
@@ -736,20 +767,31 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
         plate.rotation.y = Math.PI / 2 + addRot;
       }
 
-      // // Rotation-Y: add 0 → +90° relative to its base orientation
-      // const addRotX = THREE.MathUtils.degToRad(45 * fadeT);
-      // if (plateRotX) {
-      //   plateRotX(addRotX);
-      // } else {
-      //   plate.rotation.x = addRotX;
-      // }
-
-      // Rotation-Y: add 0 → +90° relative to its base orientation
+      // Rotation-Z: add 0 → -90° relative to its base orientation
       const addRotZ = THREE.MathUtils.degToRad(-90 * fadeT);
       if (plateSpinRotZ) {
         plateSpinRotZ(addRotZ);
       } else {
         plateSpin.rotation.z = addRotZ;
+      }
+    }
+
+    // Reversible hide/show with hysteresis
+    if (fadeT >= 0.999) {
+      hideContainer();
+    } else if (fadeT <= 0.95) {
+      showContainer();
+    }
+
+    if (fadeT >= 0.7) {
+      if (container.style.pointerEvents !== 'none') {
+        container.style.pointerEvents = 'none';
+        console.log('Canvas pointer-events set to none');
+      }
+    } else if (fadeT <= 0.6) {
+      if (container.style.pointerEvents !== 'auto') {
+        container.style.pointerEvents = 'auto';
+        console.log('Canvas pointer-events set to auto');
       }
     }
   }
@@ -1377,7 +1419,7 @@ www.bunqlabs.com
   }
 
   const t0 = performance.now();
-  renderer.setAnimationLoop(() => {
+  function renderLoop() {
     stats.begin();
     const currentTime = (performance.now() - t0) / 1000.0;
     bgMat.uniforms.uTime.value = currentTime;
@@ -1479,5 +1521,6 @@ www.bunqlabs.com
 
     renderer.render(scene, camera);
     stats.end();
-  });
+  }
+  renderer.setAnimationLoop(renderLoop);
 })();
