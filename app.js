@@ -2,15 +2,15 @@ import {
   bgVert,
   bgFrag,
   gradFrag,
-} from "https://bunqlabs.github.io/house-of-samuha/shaders.js";
+} from 'https://bunqlabs.github.io/house-of-samuha/shaders.js';
 import {
   CONFIG as RAW_CONFIG,
   params,
   paneImages,
   paneVideos,
   chefImages,
-} from "https://bunqlabs.github.io/house-of-samuha/params.js";
-import { createDebugPanel } from "https://bunqlabs.github.io/house-of-samuha/debug.js";
+} from 'https://bunqlabs.github.io/house-of-samuha/params.js';
+import { createDebugPanel } from 'https://bunqlabs.github.io/house-of-samuha/debug.js';
 
 // turn array → THREE.Vector3 here (keeps params.js free of THREE)
 const CONFIG = {
@@ -27,7 +27,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
 
 (() => {
   const startTime = performance.now();
-  console.log("Starting scene initialization and loading process");
+  console.log('Starting scene initialization and loading process');
   // -----------------------------
   // Config / Params
   // -----------------------------
@@ -64,25 +64,25 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   function getVideoTexture(src) {
     if (!videoCache.has(src)) {
       console.log(`Starting to load video: ${src}`);
-      const video = document.createElement("video");
+      const video = document.createElement('video');
       video.src = src;
       video.muted = true;
       video.loop = true;
-      video.preload = "metadata";
+      video.preload = 'metadata';
       video.playsInline = true;
-      video.crossOrigin = "anonymous";
+      video.crossOrigin = 'anonymous';
 
-      video.addEventListener("loadedmetadata", () => {
+      video.addEventListener('loadedmetadata', () => {
         console.log(`Video metadata loaded: ${src}`);
       });
-      video.addEventListener("canplay", () => {
+      video.addEventListener('canplay', () => {
         console.log(`Video ready to play: ${src}`);
       });
-      video.addEventListener("error", (e) => {
+      video.addEventListener('error', (e) => {
         console.error(`Error loading video: ${src}`, e);
       });
 
-      video.addEventListener("ended", () => {
+      video.addEventListener('ended', () => {
         video._ended = true;
       });
 
@@ -129,36 +129,38 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // Groups (Main)
   // -----------------------------
   const walls = new THREE.Group();
-  walls.name = "walls";
+  walls.name = 'walls';
   walls.position.set(0, params.wallY, 0);
   scene.add(walls);
 
   const chefs = new THREE.Group();
-  chefs.name = "chefs";
+  chefs.name = 'chefs';
   chefs.position.set(0, params.wallY, 0);
   scene.add(chefs);
 
   const panes = new THREE.Group();
-  panes.name = "panes";
+  panes.name = 'panes';
   panes.position.set(0, params.panesY, 0);
   scene.add(panes);
 
   const animator = new THREE.Group();
-  animator.name = "animator";
+  animator.name = 'animator';
   scene.add(animator);
 
   const plateGroup = new THREE.Group();
-  plateGroup.name = "plateGroup";
+  plateGroup.name = 'plateGroup';
   animator.add(plateGroup);
 
   const backgroundGroup = new THREE.Group();
-  backgroundGroup.name = "backgroundGroup";
+  backgroundGroup.name = 'backgroundGroup';
   backgroundGroup.position.set(0, 0, 5);
   scene.add(backgroundGroup);
 
   let plate = null;
   let plateRotX;
   let plateRotY;
+  let plateRotZ;
+  let plateSpinRotZ;
 
   // -----------------------------
   // Materials
@@ -245,7 +247,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // -----------------------------
   // Renderer (Main)
   // -----------------------------
-  const container = document.getElementById("webgl");
+  const container = document.getElementById('webgl');
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   const initDPR = Math.min(window.devicePixelRatio || 1, CONFIG.maxDPR);
   renderer.setPixelRatio(params.dpr);
@@ -346,7 +348,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       uv[2 * i] = (x - bb.min.x) / spanX;
       uv[2 * i + 1] = (y - bb.min.y) / spanY;
     }
-    geometry.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+    geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
     geometry.attributes.uv.needsUpdate = true;
   }
 
@@ -445,8 +447,8 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
             x: 1,
             y: 1,
             duration: params.paneHoverDuration,
-            ease: "power2.out",
-            overwrite: "auto",
+            ease: 'power2.out',
+            overwrite: 'auto',
           });
         }
       }
@@ -457,8 +459,8 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
             x: params.paneHoverScale,
             y: params.paneHoverScale,
             duration: params.paneHoverDuration,
-            ease: "power2.out",
-            overwrite: "auto",
+            ease: 'power2.out',
+            overwrite: 'auto',
           });
         }
       }
@@ -475,20 +477,20 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
         gsap.to(chef.mat.uniforms.uExposure, {
           value: 0.5,
           duration: params.chefHoverDuration,
-          ease: "power2.out",
-          overwrite: "auto",
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
         gsap.to(chef.textSprite.children[0].material, {
           opacity: 0,
           duration: params.chefHoverDuration,
-          ease: "power2.out",
-          overwrite: "auto",
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
         gsap.to(chef.textSprite.children[0].position, {
           y: -params.chefSizeY * 0.55,
           duration: params.chefHoverDuration,
-          ease: "power2.out",
-          overwrite: "auto",
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
       }
       if (newChefIndex !== -1 && chefMedia[newChefIndex]) {
@@ -496,24 +498,24 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
         gsap.to(chef.mat.uniforms.uExposure, {
           value: 1.0,
           duration: params.chefHoverDuration,
-          ease: "power2.out",
-          overwrite: "auto",
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
         gsap.to(chef.textSprite.children[0].material, {
           opacity: 1.0,
           duration: params.chefHoverDuration,
-          ease: "power2.out",
-          overwrite: "auto",
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
         gsap.to(chef.textSprite.children[0].position, {
           y: -params.chefSizeY * 0.6,
           duration: params.chefHoverDuration,
-          ease: "power2.out",
-          overwrite: "auto",
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
-        renderer.domElement.style.cursor = "pointer";
+        renderer.domElement.style.cursor = 'pointer';
       } else {
-        renderer.domElement.style.cursor = "auto";
+        renderer.domElement.style.cursor = 'auto';
       }
       hoveredChefIndex = newChefIndex;
     }
@@ -526,8 +528,8 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
         x: 1,
         y: 1,
         duration: params.paneHoverDuration,
-        ease: "power2.out",
-        overwrite: "auto",
+        ease: 'power2.out',
+        overwrite: 'auto',
       });
       hoveredPaneIndex = -1;
     }
@@ -537,22 +539,22 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       gsap.to(chef.mat.uniforms.uExposure, {
         value: 0.5,
         duration: params.chefHoverDuration,
-        ease: "power2.out",
-        overwrite: "auto",
+        ease: 'power2.out',
+        overwrite: 'auto',
       });
       gsap.to(chef.textSprite.children[0].material, {
         opacity: 0,
         duration: params.chefHoverDuration,
-        ease: "power2.out",
-        overwrite: "auto",
+        ease: 'power2.out',
+        overwrite: 'auto',
       });
       gsap.to(chef.textSprite.children[0].position, {
         y: -params.chefSizeY * 0.5,
         duration: params.chefHoverDuration,
-        ease: "power2.out",
-        overwrite: "auto",
+        ease: 'power2.out',
+        overwrite: 'auto',
       });
-      renderer.domElement.style.cursor = "auto";
+      renderer.domElement.style.cursor = 'auto';
       hoveredChefIndex = -1;
     }
   }
@@ -577,14 +579,14 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   }
 
   renderer.domElement.addEventListener(
-    "pointermove",
+    'pointermove',
     throttle(onPointerMove, 16),
     {
       passive: true,
     }
   );
-  renderer.domElement.addEventListener("pointerleave", onPointerLeave);
-  renderer.domElement.addEventListener("click", onPointerClick);
+  renderer.domElement.addEventListener('pointerleave', onPointerLeave);
+  renderer.domElement.addEventListener('click', onPointerClick);
 
   function playPane(idx) {
     const m = paneMedia[idx];
@@ -596,7 +598,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     }
 
     const p = m.video.play();
-    if (p && typeof p.then === "function")
+    if (p && typeof p.then === 'function')
       p.catch(() => {
         /* ignore policy errors */
       });
@@ -638,38 +640,38 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   }
 
   renderer.domElement.addEventListener(
-    "pointermove",
+    'pointermove',
     throttle(onPointerMovePlate, 16),
     {
       passive: true,
     }
   );
-  renderer.domElement.addEventListener("pointerleave", onPointerLeavePlate);
+  renderer.domElement.addEventListener('pointerleave', onPointerLeavePlate);
 
   // -----------------------------
   // Scroll animator
   // -----------------------------
-  const scrollSection = document.getElementById("scrollspace");
-  const animatorY = gsap.quickTo(animator.position, "y", {
+  const scrollSection = document.getElementById('scrollspace');
+  const animatorY = gsap.quickTo(animator.position, 'y', {
     duration: params.animatorScrollEase,
-    ease: "expo.out",
+    ease: 'expo.out',
     overwrite: true,
   });
-  const animatorRotX = gsap.quickTo(animator.rotation, "x", {
+  const animatorRotX = gsap.quickTo(animator.rotation, 'x', {
     duration: params.animatorScrollEase,
-    ease: "expo.out",
+    ease: 'expo.out',
     overwrite: true,
   });
-  let panesRotY = gsap.quickTo(panes.rotation, "y", {
+  let panesRotY = gsap.quickTo(panes.rotation, 'y', {
     duration: params.panesScrollEase,
-    ease: "expo.out",
+    ease: 'expo.out',
     overwrite: true,
   });
 
   function setPanesTweenDuration(dur) {
-    panesRotY = gsap.quickTo(panes.rotation, "y", {
+    panesRotY = gsap.quickTo(panes.rotation, 'y', {
       duration: dur,
-      ease: "expo.out",
+      ease: 'expo.out',
       overwrite: true,
     });
   }
@@ -722,24 +724,40 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
         y: s,
         z: s,
         duration: params.animatorScrollEase,
-        ease: "expo.out",
+        ease: 'expo.out',
         overwrite: true,
       });
 
+      // Rotation-Y: add 0 → +90° relative to its base orientation
+      const addRot = THREE.MathUtils.degToRad(60 * fadeT);
+      if (plateRotY) {
+        plateRotY(Math.PI / 2 + addRot);
+      } else {
+        plate.rotation.y = Math.PI / 2 + addRot;
+      }
+
       // // Rotation-Y: add 0 → +90° relative to its base orientation
-      // const addRot = THREE.MathUtils.degToRad(90 * fadeT);
+      // const addRotX = THREE.MathUtils.degToRad(45 * fadeT);
       // if (plateRotX) {
-      //   plateRotX(Math.PI / 2 + addRot);
+      //   plateRotX(addRotX);
       // } else {
-      //   plate.rotation.x = Math.PI / 2 + addRot;
+      //   plate.rotation.x = addRotX;
       // }
+
+      // Rotation-Y: add 0 → +90° relative to its base orientation
+      const addRotZ = THREE.MathUtils.degToRad(-90 * fadeT);
+      if (plateSpinRotZ) {
+        plateSpinRotZ(addRotZ);
+      } else {
+        plateSpin.rotation.z = addRotZ;
+      }
     }
   }
 
-  window.addEventListener("scroll", updateAnimatorFromScroll, {
+  window.addEventListener('scroll', updateAnimatorFromScroll, {
     passive: true,
   });
-  window.addEventListener("resize", updateAnimatorFromScroll);
+  window.addEventListener('resize', updateAnimatorFromScroll);
   updateAnimatorFromScroll();
 
   // -----------------------------
@@ -747,14 +765,14 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // -----------------------------
   const stats = new Stats();
   stats.showPanel(0);
-  document.getElementById("stats").appendChild(stats.dom);
+  document.getElementById('stats').appendChild(stats.dom);
 
   // -----------------------------
   // Shared materials
   // -----------------------------
   function createGradientStandardMaterial({
-    colorA = "#000000",
-    colorB = "#333333",
+    colorA = '#000000',
+    colorB = '#333333',
     base = {},
   } = {}) {
     const mat = new THREE.MeshStandardMaterial({
@@ -773,7 +791,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       shader.vertexShader = `
       varying vec2 vUv;
       ${shader.vertexShader.replace(
-        "#include <begin_vertex>",
+        '#include <begin_vertex>',
         `
         #include <begin_vertex>
         vUv = uv;
@@ -786,7 +804,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       uniform vec3 uColorB;
       varying vec2 vUv;
       ${shader.fragmentShader.replace(
-        "vec4 diffuseColor = vec4( diffuse, opacity );",
+        'vec4 diffuseColor = vec4( diffuse, opacity );',
         `
         float t = vUv.x;
         vec3 grad = mix(uColorA, uColorB, t);
@@ -800,14 +818,14 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   }
 
   const wallMat = createGradientStandardMaterial({
-    colorA: "#000000",
-    colorB: "#666666",
+    colorA: '#000000',
+    colorB: '#666666',
     base: { roughness: 0.6, metalness: 0.7 },
   });
 
   const wallMatInverse = createGradientStandardMaterial({
-    colorA: "#666666",
-    colorB: "#000000",
+    colorA: '#666666',
+    colorB: '#000000',
     base: { roughness: 0.6, metalness: 0.7 },
   });
 
@@ -816,15 +834,15 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     roughness: 1.4,
     metalness: 0.5,
     roughnessMap: texLoader.load(
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60a68bb01b690ee98c8_roughness.jpg",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60a68bb01b690ee98c8_roughness.jpg',
       (tex) => {
-        console.log("Roughness map texture loaded successfully");
+        console.log('Roughness map texture loaded successfully');
         tex.flipY = false;
         if (tex.colorSpace !== undefined) tex.colorSpace = THREE.NoColorSpace;
       },
       undefined,
       (err) => {
-        console.error("Failed to load roughness map texture", err);
+        console.error('Failed to load roughness map texture', err);
       }
     ),
   });
@@ -834,7 +852,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // -----------------------------
   function addLogoTo(plate) {
     const logoSrc =
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60abccb39942d8c6792_logo.png";
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60abccb39942d8c6792_logo.png';
     console.log(`Starting to load logo texture: ${logoSrc}`);
     texLoader.load(
       logoSrc,
@@ -865,7 +883,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   }
 
   const loader = new THREE.GLTFLoader();
-  const modelUrl = "https://rohan-pckg.github.io/3d-stuff/models/plate.glb";
+  const modelUrl = 'https://rohan-pckg.github.io/3d-stuff/models/plate.glb';
   console.log(`Starting to load plate model: ${modelUrl}`);
   loader.load(
     modelUrl,
@@ -886,32 +904,50 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
 
       plateGroup.add(plate);
 
-      plateRotX = gsap.quickTo(plate.rotation, "x", {
+      const plateSpin = new THREE.Group();
+      plateSpin.name = 'plateSpin';
+      plateGroup.add(plateSpin);
+      plateSpin.add(plate);
+
+      plateRotX = gsap.quickTo(plate.rotation, 'x', {
         duration: params.followDelay,
-        ease: "power2.out",
+        ease: 'power2.out',
       });
-      plateRotY = gsap.quickTo(plate.rotation, "y", {
+      plateRotY = gsap.quickTo(plate.rotation, 'y', {
         duration: params.followDelay,
-        ease: "power2.out",
+        ease: 'power2.out',
+      });
+      plateRotZ = gsap.quickTo(plate.rotation, 'z', {
+        duration: params.followDelay,
+        ease: 'power2.out',
+      });
+
+      plateSpinRotZ = gsap.quickTo(plateSpin.rotation, 'z', {
+        duration: params.followDelay,
+        ease: 'power2.out',
       });
 
       addLogoTo(plate);
     },
     undefined,
     (err) => {
-      console.warn("Failed to load plate.glb, using fallback cube", err);
+      console.warn('Failed to load plate.glb, using fallback cube', err);
       const geom = new THREE.BoxGeometry(0.5, 0.5, 0.5);
       const fallbackPlate = new THREE.Mesh(geom, plateMat);
       plateGroup.add(fallbackPlate);
       plate = fallbackPlate;
 
-      plateRotX = gsap.quickTo(plate.rotation, "x", {
+      plateRotX = gsap.quickTo(plate.rotation, 'x', {
         duration: params.followDelay,
-        ease: "power2.out",
+        ease: 'power2.out',
       });
-      plateRotY = gsap.quickTo(plate.rotation, "y", {
+      plateRotY = gsap.quickTo(plate.rotation, 'y', {
         duration: params.followDelay,
-        ease: "power2.out",
+        ease: 'power2.out',
+      });
+      plateRotZ = gsap.quickTo(plate.rotation, 'z', {
+        duration: params.followDelay,
+        ease: 'power2.out',
       });
 
       addLogoTo(plate);
@@ -947,7 +983,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // Builders
   // -----------------------------
   function buildWalls() {
-    console.log("Building walls group");
+    console.log('Building walls group');
     disposeChildren(walls, {
       disposeMaterials: true,
       excludeMaterials: [wallMat, wallMatInverse],
@@ -988,11 +1024,11 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
 
     walls.add(instancedMeshLeft, instancedMeshRight);
     walls.position.y = params.wallY;
-    console.log("Walls group built");
+    console.log('Walls group built');
   }
 
   function buildPanes() {
-    console.log("Building panes group");
+    console.log('Building panes group');
     if (paneMedia && paneMedia.length) {
       for (const m of paneMedia) {
         try {
@@ -1079,11 +1115,11 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     }
 
     panes.position.y = params.panesY;
-    console.log("Panes group built");
+    console.log('Panes group built');
   }
 
   function buildChefs() {
-    console.log("Building chefs group");
+    console.log('Building chefs group');
     disposeChildren(chefs, { disposeMaterials: true, excludeMaterials: [] });
     chefMedia = [];
 
@@ -1204,8 +1240,8 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     chefs.add(leftGroup, rightGroup);
     chefs.position.y = params.wallY + params.chefLocY;
 
-    console.log("chefMedia populated:", chefMedia.length, "items");
-    console.log("Chefs group built");
+    console.log('chefMedia populated:', chefMedia.length, 'items');
+    console.log('Chefs group built');
   }
 
   buildWalls();
@@ -1222,14 +1258,14 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
-  window.addEventListener("resize", onResize);
+  window.addEventListener('resize', onResize);
 
   // Wait for all assets to load before logging completion
   const assetsToLoad = [
     // Plate model
     new Promise((resolve, reject) => {
       loader.load(
-        "https://rohan-pckg.github.io/3d-stuff/models/plate.glb",
+        'https://rohan-pckg.github.io/3d-stuff/models/plate.glb',
         () => resolve(),
         undefined,
         () => resolve() // Resolve even on error to avoid blocking
@@ -1238,7 +1274,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     // Logo texture
     new Promise((resolve, reject) => {
       texLoader.load(
-        "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60abccb39942d8c6792_logo.png",
+        'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60abccb39942d8c6792_logo.png',
         () => resolve(),
         undefined,
         () => resolve()
@@ -1247,7 +1283,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     // Roughness map
     new Promise((resolve, reject) => {
       texLoader.load(
-        "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60a68bb01b690ee98c8_roughness.jpg",
+        'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68c2d60a68bb01b690ee98c8_roughness.jpg',
         () => resolve(),
         undefined,
         () => resolve()
@@ -1278,10 +1314,10 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     ...paneVideos.map(
       (src) =>
         new Promise((resolve, reject) => {
-          const video = document.createElement("video");
+          const video = document.createElement('video');
           video.src = src;
-          video.addEventListener("loadedmetadata", () => resolve());
-          video.addEventListener("error", () => resolve());
+          video.addEventListener('loadedmetadata', () => resolve());
+          video.addEventListener('error', () => resolve());
         })
     ),
   ];
@@ -1328,13 +1364,13 @@ www.bunqlabs.com
       if (fps < targetFPSLow && params.fbmOctaves > 4) {
         params.fbmOctaves = 4;
         bgMat.uniforms.uFbmOctaves.value = params.fbmOctaves;
-        console.log("octaves :", params.fbmOctaves);
+        console.log('octaves :', params.fbmOctaves);
       } else if (fps > targetFPSHigh && params.fbmOctaves < 6) {
         params.fbmOctaves = 6;
         bgMat.uniforms.uFbmOctaves.value = params.fbmOctaves;
-        console.log("octaves :", params.fbmOctaves);
+        console.log('octaves :', params.fbmOctaves);
       }
-      console.log("octaves :", params.fbmOctaves);
+      console.log('octaves :', params.fbmOctaves);
       frameCount = 0;
       tPrev = now;
     }
@@ -1394,8 +1430,8 @@ www.bunqlabs.com
         gsap.to(m.mat.uniforms.uSaturation, {
           value: 0,
           duration: params.paneColorTransition,
-          ease: "power2.out",
-          overwrite: "auto",
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
       }
       if (activeIndex !== -1) {
@@ -1404,8 +1440,8 @@ www.bunqlabs.com
         gsap.to(m.mat.uniforms.uSaturation, {
           value: 1,
           duration: params.paneColorTransition,
-          ease: "power2.out",
-          overwrite: "auto",
+          ease: 'power2.out',
+          overwrite: 'auto',
         });
       }
       previousActive = activeIndex;
@@ -1417,8 +1453,8 @@ www.bunqlabs.com
         x: 1,
         y: 1,
         duration: params.paneHoverDuration,
-        ease: "power2.out",
-        overwrite: "auto",
+        ease: 'power2.out',
+        overwrite: 'auto',
       });
     }
 
