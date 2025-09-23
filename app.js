@@ -9,7 +9,7 @@ import {
   paneImages,
   paneVideos,
   chefImages,
-} from 'https://bunqlabs.github.io/house-of-samuha/params.js';
+} from '/params.js';
 import { createDebugPanel } from 'https://bunqlabs.github.io/house-of-samuha/debug.js';
 
 // turn array → THREE.Vector3 here (keeps params.js free of THREE)
@@ -123,6 +123,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // Scene (Main)
   // -----------------------------
   const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x000000);
 
   // -----------------------------
   // Groups (Main)
@@ -241,7 +242,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   // Renderer (Main)
   // -----------------------------
   const container = document.getElementById('webgl');
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   const initDPR = Math.min(window.devicePixelRatio || 1, CONFIG.maxDPR);
   renderer.setPixelRatio(params.dpr);
   renderer.setSize(container.clientWidth, container.clientHeight);
@@ -701,8 +702,8 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       overwrite: true,
     })(gradientOpacityTarget);
 
-    const minY = -32;
-    const maxY = -35;
+    const minY = params.animatorFadeStart;
+    const maxY = params.animatorMaxY;
     const opacityProgress = THREE.MathUtils.clamp(
       (yTarget - minY) / (maxY - minY),
       0,

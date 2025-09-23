@@ -51,6 +51,7 @@ export const params = {
   animatorScrollEase: 2,
   animatorRotateThresholdX: -12,
   animatorRotateOnDeg: 90,
+  animatorFadeStart: -32,
 
   dpr: 1,
   autoPerformance: true,
