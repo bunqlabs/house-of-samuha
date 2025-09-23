@@ -785,12 +785,12 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
 
     if (fadeT >= 0.7) {
       if (container.style.pointerEvents !== 'none') {
-        container.style.pointerEvents = 'none';
+        scrollSection.style.pointerEvents = 'none';
         console.log('Canvas pointer-events set to none');
       }
     } else if (fadeT <= 0.6) {
       if (container.style.pointerEvents !== 'auto') {
-        container.style.pointerEvents = 'auto';
+        scrollSection.style.pointerEvents = 'auto';
         console.log('Canvas pointer-events set to auto');
       }
     }
