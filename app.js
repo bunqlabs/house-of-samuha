@@ -66,11 +66,13 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
       console.log(`Starting to load video: ${src}`);
       const video = document.createElement("video");
       video.crossOrigin = "anonymous";
-      video.src = src;
+      video.setAttribute("crossorigin", "anonymous");
       video.muted = true;
       video.loop = true;
       video.preload = "metadata";
       video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.src = src;
 
       video.addEventListener("loadedmetadata", () => {
         console.log(`Video metadata loaded: ${src}`);
