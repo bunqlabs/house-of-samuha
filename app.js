@@ -925,7 +925,8 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
   }
 
   const loader = new THREE.GLTFLoader();
-  const modelUrl = "https://rohan-pckg.github.io/3d-stuff/models/plate.glb";
+  const modelUrl =
+    "https://bunqlabs.github.io/house-of-samuha/assets/plate/plate.glb";
   console.log(`Starting to load plate model: ${modelUrl}`);
   loader.load(
     modelUrl,
@@ -1307,7 +1308,7 @@ const videoCache = new Map(); // Key: src (string), Value: { video: HTMLVideoEle
     // Plate model
     new Promise((resolve, reject) => {
       loader.load(
-        "https://rohan-pckg.github.io/3d-stuff/models/plate.glb",
+        "https://bunqlabs.github.io/house-of-samuha/assets/plate/plate.glb",
         () => resolve(),
         undefined,
         () => resolve() // Resolve even on error to avoid blocking
