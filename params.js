@@ -20,11 +20,11 @@ export const params = {
   chefOpacityNear: 0.0,
   chefOpacityFar: 20.0,
 
-  panesY: -8.75,
+  panesY: -9.4,
   paneSizeX: 1,
   paneSizeY: 1.77,
   paneRadius: 1,
-  paneRise: 0.8,
+  paneRise: 0.85,
   paneTwistDeg: 50,
   paneFillet: 0.0,
   paneCurveSegments: 1,
