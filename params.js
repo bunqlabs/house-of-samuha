@@ -30,7 +30,7 @@ export const params = {
   paneCurveSegments: 1,
   panesRotMinDeg: 75,
   panesRotMaxDeg: 2430,
-  panesScrollEase: 0.25,
+  panesScrollEase: 0.5,
   paneColorTransition: 0.5,
   paneHoverScale: 1.05,
   paneHoverDuration: 0.3,
@@ -48,7 +48,7 @@ export const params = {
 
   animatorMinY: 0,
   animatorMaxY: -40,
-  animatorScrollEase: 0.25,
+  animatorScrollEase: 0.5,
   animatorRotateThresholdX: -12,
   animatorRotateOnDeg: 90,
   animatorFadeStart: -35,
