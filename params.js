@@ -30,7 +30,7 @@ export const params = {
   paneCurveSegments: 1,
   panesRotMinDeg: 75,
   panesRotMaxDeg: 2430,
-  panesScrollEase: 2,
+  panesScrollEase: 0.25,
   paneColorTransition: 0.5,
   paneHoverScale: 1.05,
   paneHoverDuration: 0.3,
