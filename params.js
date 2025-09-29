@@ -48,7 +48,7 @@ export const params = {
 
   animatorMinY: 0,
   animatorMaxY: -40,
-  animatorScrollEase: 0,
+  animatorScrollEase: 0.25,
   animatorRotateThresholdX: -12,
   animatorRotateOnDeg: 90,
   animatorFadeStart: -35,
