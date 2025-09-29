@@ -105,7 +105,7 @@ export const paneImages = [
 ];
 
 export const paneVideos = [
-  "https://bunqlabs.github.io/house-of-samuha/assets/panes/6.webm",
+  "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e%2F68d4e9f6ee7be1982228db5a_6-transcode.mp4",
   "https://bunqlabs.github.io/house-of-samuha/assets/panes/5.webm",
   "https://bunqlabs.github.io/house-of-samuha/assets/panes/4.webm",
   "https://bunqlabs.github.io/house-of-samuha/assets/panes/3.webm",
