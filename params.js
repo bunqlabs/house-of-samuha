@@ -75,10 +75,10 @@ export const params = {
   baseColorR: 1,
   baseColorG: 1,
   baseColorB: 1,
-  blendMode: "normal",
+  blendMode: 'normal',
 
   gradientOpacity: 1,
-  gradientBlendMode: "multiply",
+  gradientBlendMode: 'multiply',
   gradientCenterColorR: 1,
   gradientCenterColorG: 1,
   gradientCenterColorB: 1,
@@ -96,70 +96,71 @@ export const params = {
 };
 
 export const paneImages = [
-  "assets/panes/color/1.jpg",
-  "assets/panes/color/2.jpg",
-  "assets/panes/color/3.jpg",
-  "assets/panes/color/4.jpg",
-  "assets/panes/color/5.jpg",
-  "assets/panes/color/6.jpg",
+  'assets/panes/color/1.jpg',
+  'assets/panes/color/2.jpg',
+  'assets/panes/color/3.jpg',
+  'assets/panes/color/4.jpg',
+  'assets/panes/color/5.jpg',
+  'assets/panes/color/6.jpg',
 ];
 
 export const paneVideos = [
-  "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e%2F68d4e9f6ee7be1982228db5a_6-transcode.mp4",
-  "https://bunqlabs.github.io/house-of-samuha/assets/panes/5.webm",
-  "https://bunqlabs.github.io/house-of-samuha/assets/panes/4.webm",
-  "https://bunqlabs.github.io/house-of-samuha/assets/panes/3.webm",
-  "https://bunqlabs.github.io/house-of-samuha/assets/panes/2.webm",
-  "https://bunqlabs.github.io/house-of-samuha/assets/panes/1.webm",
+  'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e%2F68d4e9f6ee7be1982228db5a_6-transcode.mp4',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/5.webm',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/4.webm',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/3.webm',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/2.webm',
+  'https://bunqlabs.github.io/house-of-samuha/assets/panes/1.webm',
 ];
 
 export const chefImages = [
   {
     imageLink:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbce715782e5fdcaedac20_5.jpg",
-    chefName: "Chef Nikos",
-    chefLink: "https://house-of-samuha.webflow.io/chefs/chef-nikos-demetriou",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbce715782e5fdcaedac20_5.jpg',
+    chefName: 'Chef Nikos',
+    chefLink: 'https://house-of-samuha.webflow.io/chefs/chef-nikos-demetriou',
     chefTitle:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbcbab06a080472106d8fa_5.png",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68da68c69bf32c1d3b4047ea_5.png',
+  },
+
+  {
+    imageLink:
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbce713dc86ed94f54e64d_3.jpg',
+    chefName: 'Chef Malik',
+    chefLink: 'https://house-of-samuha.webflow.io/chefs/chef-malik-johnson',
+    chefTitle:
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68da68c6d7bbcab182113e68_3.png',
   },
   {
     imageLink:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbce713dc86ed94f54e64d_3.jpg",
-    chefName: "Chef Malik",
-    chefLink: "https://house-of-samuha.webflow.io/chefs/chef-malik-johnson",
+      'https://cdn.prod.website-files.com/68cbd4317d1a4230f02acfbd/68cbd5d6a1ab6884c0722405_1.jpg',
+    chefName: 'Chef Jia',
+    chefLink: 'https://house-of-samuha.webflow.io/chefs/chef-jia-chen',
     chefTitle:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbc9e03b6eef17cce0e219_4.png",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68da68c645c6f790ce038338_1.png',
   },
   {
     imageLink:
-      "https://cdn.prod.website-files.com/68cbd4317d1a4230f02acfbd/68cbd5d6a1ab6884c0722405_1.jpg",
-    chefName: "Chef Jia",
-    chefLink: "https://house-of-samuha.webflow.io/chefs/chef-jia-chen",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbce71a1ab6884c06f7dc5_4.jpg',
+    chefName: 'Chef Marco',
+    chefLink: 'https://house-of-samuha.webflow.io/chefs/chef-marco-de-santis',
     chefTitle:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbc9e0adcc360b7449ce36_1.png",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68da68c6fd9ef5ed64e34c6f_4.png',
   },
   {
     imageLink:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbce71a1ab6884c06f7dc5_4.jpg",
-    chefName: "Chef Marco",
-    chefLink: "https://house-of-samuha.webflow.io/chefs/chef-marco-de-santis",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbce717107c1a68d7f3a69_2.jpg',
+    chefName: 'Chef Bennett',
+    chefLink: 'https://house-of-samuha.webflow.io/chefs/chef-bennett-shaw',
     chefTitle:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbcbabecf34c8ceebbea1b_4.png",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68da68c69bf32c1d3b4047e7_2.png',
   },
   {
     imageLink:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbce717107c1a68d7f3a69_2.jpg",
-    chefName: "Chef Bennett",
-    chefLink: "https://house-of-samuha.webflow.io/chefs/chef-bennett-shaw",
+      'https://cdn.prod.website-files.com/68cbd4317d1a4230f02acfbd/68cbd45ac846b4f282cb75a4_0.jpg',
+    chefName: 'Chef Antonio',
+    chefLink: 'https://house-of-samuha.webflow.io/chefs/chef-antonio-ricci',
     chefTitle:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbcbabce139335c7269a30_2.png",
-  },
-  {
-    imageLink:
-      "https://cdn.prod.website-files.com/68cbd4317d1a4230f02acfbd/68cbd45ac846b4f282cb75a4_0.jpg",
-    chefName: "Chef Antonio",
-    chefLink: "https://house-of-samuha.webflow.io/chefs/chef-antonio-ricci",
-    chefTitle:
-      "https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68cbcbabeaf3a242b2a92d07_0.png",
+      'https://cdn.prod.website-files.com/68a844b2b31c9628c316759e/68da68c6d98717542ad88280_0.png',
   },
 ];
