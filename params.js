@@ -47,11 +47,11 @@ export const params = {
   bgPlaneLocY: 0,
 
   animatorMinY: 0,
-  animatorMaxY: -35,
-  animatorScrollEase: 2,
+  animatorMaxY: -40,
+  animatorScrollEase: 0,
   animatorRotateThresholdX: -12,
   animatorRotateOnDeg: 90,
-  animatorFadeStart: -27,
+  animatorFadeStart: -35,
 
   dpr: 1,
   autoPerformance: true,

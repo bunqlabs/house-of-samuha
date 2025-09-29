@@ -9,7 +9,7 @@ import {
   paneImages,
   paneVideos,
   chefImages,
-} from 'https://bunqlabs.github.io/house-of-samuha/params.js';
+} from '/params.js';
 import { createDebugPanel } from 'https://bunqlabs.github.io/house-of-samuha/debug.js';
 
 // turn array → THREE.Vector3 here (keeps params.js free of THREE)
